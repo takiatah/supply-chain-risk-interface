@@ -81,7 +81,8 @@ supply-chain-risk-interface/
 │   └── styling.py
 ├── app.py
 ├── overall_data_with_predictions.csv
-└── requirements.txt
+├── requirements.txt
+└── .gitignore
 ```
 
 ## Installation and Setup
