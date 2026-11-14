@@ -8,6 +8,8 @@ This project examines supply chain risks associated with China–Russia trade re
 
 The dashboard provides interactive visualizations and analytical tools to explore risk trends, compare China and Russia, investigate individual indicators, and examine projected changes in supply chain risk.
 
+For a list of all the indicator descriptions and limitations, see `overall_data_description.md`.
+
 ## Features
 
 - **Risk Index Overview:** View the latest observed risk indices for Overall, Russia, and China, alongside November 2026 forecasts.
@@ -81,6 +83,8 @@ supply-chain-risk-interface/
 │   └── styling.py
 ├── app.py
 ├── overall_data_with_predictions.csv
+├── overall_data_description.md
+├── README.md
 ├── requirements.txt
 └── .gitignore
 ```
@@ -162,11 +166,11 @@ The project integrates trade, economic, transportation, geopolitical, and sancti
 
 Some important data considerations include:
 
-- Historical trade data combines UN Comtrade data for 2010–2014 and General Administration of Customs of China (GACC) data for 2015–2026.
 - OECD transportation data from 2024 is applied to 2025–2026 where more recent observations are unavailable.
+- LSBCI and OECD transport data are annual indices, and is not updated monthly
 - Some indicators are proxies or estimates rather than direct measurements of supply chain risk.
+- IMF trade data is measured in millions of USD
 - Forecasted values represent model estimates and should not be interpreted as observed outcomes.
-- Sanctions indicators distinguish between newly initiated sanctions and total active sanctions where applicable.
 
 These limitations should be considered when interpreting the dashboard's visualizations and forecasts.
 

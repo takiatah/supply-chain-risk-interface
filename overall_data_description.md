@@ -21,8 +21,6 @@ All the raw and calclulated values. Calculated variables have the calculation us
     * Geopolitical risk data 
 * **Federal Reserve Economic Data (FRED)**
     * Exchange rate data
-* **General Administration of Customs China (GACC)**
-    * Commodity trade values and concentrations (separate dataset)
 * **Organisation for Economic Co-operation and Development (OECD)**
     * Transport/Insurance cost
 * **Global Sanctions Data Base**
@@ -32,9 +30,9 @@ All the raw and calclulated values. Calculated variables have the calculation us
 
 ## TIME PERIOD
 
-**January 2006 - August 2026**
+**January 2006 - November 2026**
 
-Some values are missing for May - Aug 2026
+Some values are missing for June - November 2026
 
 ---
 
@@ -241,6 +239,10 @@ The following columns are obtained from the **Geopolitical Risk (GPR) Index data
 
 **Country-specific Geopolitical Risk measure for China**, representing the percentage of recent newspaper articles associated with China-related geopolitical risk.
 
+---
+
+## **Sanctions Risk**
+
 ### `Russia Sanctions Start` (`RUS_SANC_START`)
 
 Measures the **monthly number of new sanctions cases targeting Russia** using the Global Sanctions Data Base (GSDB-R5). Each unique sanction case is counted once on the month it started.
@@ -274,49 +276,3 @@ For January–August 2026, December 2025 values are carried forward because the 
 
 
 ---
-
-## **Concentration Risk Data** (separate dataset)
-
-### `Russia's Herfindahl-Hirschman Index` (`RUS_HHI`) 
-
-Measures the concentration of Russia’s exports across commodity categories using the Herfindahl-Hirschman Index (HHI). Higher values indicate greater reliance on a smaller number of commodity categories, while lower values indicate a more diversified export composition.
-
-### `China's Herfindahl-Hirschman Index` (`CHN_HHI`)
-
-Measures the concentration of China’s exports across commodity categories using the Herfindahl-Hirschman Index (HHI). Higher values indicate greater reliance on a smaller number of commodity categories, while lower values indicate a more diversified export composition.
-
-### `Concentrations (separate dataset)`
-
-The columns in the 2 concentration datasets are the trade values of the top 10 current HS categories exported from both countries. The columns with suffix _CON are the concentration of that commodity out of the total trade value.
-
-The HS codes and names are given below.
-
-## Russia — HS Commodity Codes
-
-| HS Code | Commodity Name |
-|---|---|
-| 03 | Fish and crustaceans, molluscs and other aquatic invertebrates |
-| 12 | Oil seeds and oleaginous fruits; miscellaneous grains, seeds and fruits; industrial or medicinal plants; straw and fodder |
-| 15 | Animal or vegetable fats and oils and their cleavage products; prepared edible fats; animal or vegetable waxes |
-| 26 | Ores, slag and ash |
-| 27 | Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes |
-| 31 | Fertilizers |
-| 44 | Wood and articles of wood; wood charcoal |
-| 71 | Natural or cultured pearls, precious or semiprecious stones, precious metals, metals clad with precious metal, and articles thereof; imitation jewelry; coin |
-| 74 | Copper and articles thereof |
-| 76 | Aluminum and articles thereof |
-
-## China — HS Commodity Codes
-
-| HS Code | Commodity Name |
-|---|---|
-| 29 | Organic chemicals |
-| 39 | Plastics and articles thereof |
-| 40 | Rubber and articles thereof |
-| 61 | Articles of apparel and clothing accessories, knitted or crocheted |
-| 64 | Footwear, gaiters and the like; parts of such articles |
-| 73 | Articles of iron or steel |
-| 84 | Nuclear reactors, boilers, machinery and mechanical appliances; parts thereof |
-| 85 | Electrical machinery and equipment and parts thereof; sound recorders and reproducers, television image and sound recorders and reproducers, and parts and accessories of such articles |
-| 87 | Vehicles other than railway or tramway rolling stock, and parts and accessories thereof |
-| 90 | Optical, photographic, cinematographic, measuring, checking, precision, medical or surgical instruments and apparatus; parts and accessories thereof |
