@@ -29,13 +29,40 @@ def apply_custom_styles():
                 margin-bottom: 1.5rem;
             }
 
+            /* Adapt to Streamlit's theme */
+            @media (prefers-color-scheme: dark) {
+                .main-header {
+                    color: #bfdbfe !important;
+                }
+
+                .sub-header {
+                    color: #cbd5e1 !important;
+                }
+
+                .description {
+                    color: #94a3b8 !important;
+                }
+            }
+
+            /* Dark mode */
+            .stApp[data-theme="dark"] .main-header {
+                color: #bfdbfe !important;
+            }
+
+            .stApp[data-theme="dark"] .sub-header {
+                color: #cbd5e1 !important;
+            }
+
+            .stApp[data-theme="dark"] .description {
+                color: #94a3b8 !important;
+            }
+
             .kpi-card {
-                background: linear-gradient(135deg, #1e3a8a, #4338ca);
-                padding: 1.3rem;
-                border-radius: 12px;
-                color: white;
-                text-align: center;
-                min-height: 145px;
+                background: #FDF3DD;
+                border: 2px solid #FBDC98;
+                border-radius: 10px;
+                padding: 20px;
+                color: black;
             }
 
             .kpi-label {

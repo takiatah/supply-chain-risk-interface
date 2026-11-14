@@ -392,7 +392,7 @@ def render_indicators_page(df):
 
         st.plotly_chart(
             fig,
-            use_container_width=True
+            width="stretch"
         )
 
     # --------------------------------------------------------
@@ -422,7 +422,7 @@ def render_indicators_page(df):
 
     st.dataframe(
         selected_data,
-        use_container_width=True,
+        width="stretch",
         hide_index=True
     )
 

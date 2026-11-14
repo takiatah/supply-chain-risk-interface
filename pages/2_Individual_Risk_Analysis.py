@@ -101,7 +101,7 @@ fig = create_risk_index_chart(
 )
 
 if fig:
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 else:
     st.warning(f"No data available for {index_type}.")
 
@@ -130,7 +130,7 @@ if not future.empty:
 
     st.dataframe(
         forecast_table,
-        use_container_width=True,
+        width="stretch",
         hide_index=True
     )
 

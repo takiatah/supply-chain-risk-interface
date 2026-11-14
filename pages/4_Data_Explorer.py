@@ -30,14 +30,10 @@ def render_data_explorer_page(df):
     )
 
     # Dataset information.
-    col1, col2, col3 = st.columns(3)
+    col1, col2= st.columns(2)
 
     col1.metric("Total Observations", f"{len(df):,}")
     col2.metric("Total Columns", f"{len(df.columns):,}")
-    col3.metric(
-        "Missing Values",
-        f"{df.isna().sum().sum():,}"
-    )
 
     st.markdown('<div class="section-divider"></div>',
                 unsafe_allow_html=True)
@@ -104,7 +100,7 @@ def render_data_explorer_page(df):
 
     st.dataframe(
         display_df,
-        use_container_width=True,
+        width="stretch",
         hide_index=True
     )
 
@@ -137,7 +133,7 @@ def render_data_explorer_page(df):
         else:
             st.dataframe(
                 missing,
-                use_container_width=True,
+                width="stretch",
                 hide_index=True
             )
 

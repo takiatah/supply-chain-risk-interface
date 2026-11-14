@@ -114,7 +114,7 @@ fig = create_risk_index_chart(
 )
 
 if fig:
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 else:
     st.warning("Overall risk index data is unavailable.")
 
@@ -146,5 +146,5 @@ comparison_fig = create_comparison_chart(
 
 st.plotly_chart(
     comparison_fig,
-    use_container_width=True
+    width="stretch"
 )

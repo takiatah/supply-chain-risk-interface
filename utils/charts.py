@@ -266,8 +266,7 @@ def render_kpi_card(label, value, month, color):
 
     st.html(
         f"""
-        <div class="kpi-card"
-             style="background: linear-gradient(135deg, {color}, #334155);">
+        <div class="kpi-card">
             <div class="kpi-label">{label}</div>
             <div class="kpi-value">{value_text}</div>
             <div class="kpi-month">
