@@ -1,0 +1,11 @@
+variant,months_compared,correlation_with_main,avg_abs_difference_pts,same_alert_status_pct,latest_value,first_alert_Crimea_2014,first_alert_Invasion_2022
+"MAIN: equal baskets, configured indicator weights",221,1.0,0.0,100,64.1,never,2022-02
+All indicators weighted the same (ignore configured weights),221,0.989,1.3,98,63.8,never,2022-02
+Configured weights flattened (square root of each weight),221,0.998,0.6,99,64.1,never,2022-02
+PCA basket weights,221,0.98,4.7,98,64.9,never,2022-02
+Learned basket weights (walk-forward),174,0.656,11.7,91,41.6,never,2022-03
+Without the dependency basket,221,0.949,3.7,94,56.6,never,2022-03
+Without the transportation basket,221,0.973,7.3,92,70.8,2014-03,2022-02
+Without the economic basket,221,0.984,3.6,93,69.7,never,2022-02
+Without the geopolitical basket,221,0.916,4.8,95,57.6,never,2022-03
+Without the sanctions basket,221,0.987,2.4,96,63.9,never,2022-03

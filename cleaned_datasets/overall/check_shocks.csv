@@ -1,0 +1,11 @@
+event,series,avg_6m_before,max_6m_after,rise,first_month_at_or_above_alert
+Crimea_2014,index_equal,47.9,65.6,17.7,never
+Crimea_2014,index_pca,44.7,61.5,16.8,never
+Crimea_2014,index_learned,51.4,66.7,15.3,never
+Crimea_2014,baseline_gpr_chn,28.8,76.8,47.9,2014-05
+Crimea_2014,baseline_cny_vol_6m,40.9,100.0,59.1,2014-03
+Invasion_2022,index_equal,65.2,80.1,14.9,2022-03
+Invasion_2022,index_pca,71.6,84.2,12.6,2022-02
+Invasion_2022,index_learned,53.5,67.3,13.8,never
+Invasion_2022,baseline_gpr_chn,80.5,100.0,19.5,2022-02
+Invasion_2022,baseline_cny_vol_6m,52.3,99.5,47.2,2022-05

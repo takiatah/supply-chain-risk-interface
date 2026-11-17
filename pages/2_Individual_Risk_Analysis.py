@@ -16,8 +16,14 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 COMPONENT_FILES = {
     "Overall": PROJECT_ROOT / "cleaned_datasets" / "risk_index_monthly.csv",
-    "Russia": PROJECT_ROOT / "cleaned_datasets" / "russia_risk_index_monthly.csv",
-    "China": PROJECT_ROOT / "cleaned_datasets" / "china_risk_index_monthly.csv"
+    "Russia": PROJECT_ROOT / "cleaned_datasets" / "russia" / "risk_index_monthly.csv",
+    "China": PROJECT_ROOT / "cleaned_datasets" / "china" / "risk_index_monthly.csv"
+}
+
+SHOCK_FILES = {
+    "Overall": PROJECT_ROOT / "cleaned_datasets" / "overall" / "check_shocks.csv",
+    "Russia": PROJECT_ROOT / "cleaned_datasets" / "russia" / "check_shocks.csv",
+    "China": PROJECT_ROOT / "cleaned_datasets" / "china" / "check_shocks.csv"
 }
 
 COMPONENT_COLUMNS = {
@@ -60,6 +66,39 @@ def load_component_data(file_path):
             )
 
     return component_df
+
+@st.cache_data
+def load_shock_data(file_path):
+    shock_df = pd.read_csv(file_path)
+
+    # Keep only the equal-weighted risk index.
+    shock_df = shock_df[
+        shock_df["series"] == "index_equal"
+    ].copy()
+
+    shock_df = shock_df.drop(columns=["series"])
+
+    shock_df = shock_df.rename(columns={
+        "event": "Geopolitical Event",
+        "avg_6m_before": "Average Risk (6M Before)",
+        "max_6m_after": "Maximum Risk (6M After)",
+        "rise": "Risk Increase",
+        "first_month_at_or_above_alert": "First Alert Month (75+)"
+    })
+
+    numeric_columns = [
+        "Average Risk (6M Before)",
+        "Maximum Risk (6M After)",
+        "Risk Increase"
+    ]
+
+    for column in numeric_columns:
+        shock_df[column] = pd.to_numeric(
+            shock_df[column],
+            errors="coerce"
+        ).round(1)
+
+    return shock_df
 
 apply_custom_styles()
 
@@ -296,3 +335,50 @@ if not future.empty:
 
 else:
     st.info("No forecast observations are available.")
+
+# ============================================================
+# KNOWN SHOCK ANALYSIS
+# ============================================================
+
+st.markdown('<div class="section-divider"></div>',
+            unsafe_allow_html=True)
+
+st.markdown(
+    '<div class="sub-header">Known Shock Analysis</div>',
+    unsafe_allow_html=True
+)
+
+st.caption(
+    "Evaluate how the risk index responded to major geopolitical "
+    "events by comparing its average value during the six months "
+    "before an event with its maximum value during the six months after."
+)
+
+shock_path = SHOCK_FILES[index_type]
+
+if shock_path.exists():
+
+    shock_df = load_shock_data(str(shock_path))
+
+    if not shock_df.empty:
+
+        st.dataframe(
+            shock_df,
+            width="stretch",
+            hide_index=True
+        )
+
+        create_download_button(
+            shock_df,
+            f"{index_type.lower()}_known_shocks.csv"
+        )
+
+    else:
+        st.info(
+            f"No equal-weighted index shock results available for {index_type}."
+        )
+
+else:
+    st.warning(
+        f"Shock analysis file not found: {shock_path}"
+    )

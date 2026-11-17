@@ -1,0 +1,21 @@
+component,indicator,weight_inside_component,share_of_index_equal,share_of_index_pca,direction,smoothing_months,why
+dependency,chn_import_dep,0.429,0.086,0.085,higher = riskier,3,"Share of China's imports that come from Russia (energy, metals, timber). More reliance on one supplier means a disruption is harder to replace. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM."
+dependency,chn_export_dep,0.429,0.086,0.085,higher = riskier,3,Share of China's exports that go to Russia. More sales resting on one buyer means a disruption costs more. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM.
+dependency,tii_chn,0.143,0.029,0.028,higher = riskier,3,Trade intensity of China's exports to Russia: dependency relative to Russia's normal weight in world imports.
+transportation,chn_trans_cost,0.333,0.067,0.115,higher = riskier,3,"Transport and insurance cost on China's imports from Russia (CIF minus FOB gap, yearly value spread over months). Higher cost = harder to move goods. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM."
+transportation,lsci_chn,0.111,0.022,0.038,higher = safer,3,"China's liner shipping connectivity (UNCTAD). Higher = better connected, so lower risk."
+transportation,lsci_rus,0.222,0.044,0.077,higher = safer,3,"Russia's liner shipping connectivity (UNCTAD). Higher = better connected, so lower risk. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM."
+transportation,lsbci,0.333,0.067,0.115,higher = safer,3,Bilateral shipping connectivity between China and Russia (yearly value repeated across months). Higher = lower risk. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM.
+economic,rub_depr_12m,0.167,0.033,0.0,higher = riskier,1,Ruble weakening vs USD over 12 months: makes imports and debt service more expensive for Russia.
+economic,rub_vol_6m,0.167,0.033,0.0,higher = riskier,1,How jumpy the ruble has been: unstable prices make contracts and payments riskier.
+economic,cny_vol_6m,0.167,0.033,0.0,higher = riskier,1,How jumpy the yuan has been: unstable prices make contracts and payments riskier.
+economic,rus_cpi_yoy,0.167,0.033,0.0,higher = riskier,1,Russian inflation: a sign of supply and price stress inside Russia.
+economic,chn_cpi_yoy,0.167,0.033,0.0,higher = riskier,1,Chinese inflation: a sign of price stress inside China.
+economic,chn_price_index,0.167,0.033,0.0,higher = safer,1,"China's commodity net export price index. Higher = better terms of trade, so lower risk (direction -1)."
+geopolitical,gpr_global,0.167,0.033,0.035,higher = riskier,3,Global geopolitical risk (GPR) news index: world-wide tension that affects every route and counterparty.
+geopolitical,gpr_rus,0.5,0.1,0.106,higher = riskier,3,Geopolitical risk (GPR) news index for Russia. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM.
+geopolitical,gpr_chn,0.333,0.067,0.07,higher = riskier,3,Geopolitical risk (GPR) news index for China. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM.
+sanctions,rus_sanc_start,0.429,0.086,0.106,higher = riskier,1,New sanction cases against Russia that started this month (GSDB). Scored with a rolling z-score because the series is mostly zeros. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM.
+sanctions,chn_sanc_start,0.143,0.029,0.035,higher = riskier,1,New sanction cases against China that started this month (GSDB). Rolling z-score because the series is mostly zeros.
+sanctions,rus_sanc,0.286,0.057,0.071,higher = riskier,1,Active sanction cases against Russia (GSDB). Rolling z-score. Weight above 1 set by Takia: judged more important for this corridor. REASON TO CONFIRM.
+sanctions,chn_sanc,0.143,0.029,0.035,higher = riskier,1,Active sanction cases against China (GSDB). Rolling z-score.

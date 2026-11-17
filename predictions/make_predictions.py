@@ -9,7 +9,7 @@ from xgboost import XGBRegressor
 # LOAD DATA ----------------------------------------------------------
 
 df = pd.read_csv("cleaned_datasets/main_data.csv") 
-indicies_df = pd.read_csv("cleaned_datasets/risk_index_monthly.csv")
+indicies_df = pd.read_csv("cleaned_datasets/overall/risk_index_monthly.csv")
 
 # CLEAN DATA AND ADD COLUMNS -------------------------------------
 
@@ -358,11 +358,11 @@ def plot_accuracy(
 
 model_xgb = XGBRegressor(
     n_estimators=1000,
-    max_depth=4,
+    max_depth=3,
     learning_rate=0.1,
-    subsample=0.9,
-    colsample_bytree=0.8,
-    min_child_weight=5,
+    subsample=0.6,
+    colsample_bytree=0.7, 
+    min_child_weight=3, 
     reg_lambda=10,
     reg_alpha=1,
     gamma=0.5,
@@ -406,15 +406,19 @@ plot_accuracy(
     results_equal["data"]
 )
 
-# MAE: 3.521332603122876
-# RMSE: 4.159684390539275
-# R²: 0.40102049992477695
+# MAE OVERALL: 2.6799317839249333
+# RMSE OVERALL: 3.1585740835813656
+# R^2 OVERALL: -0.22822303566990065
 
 # OVERALL FUTURE PREDICTIONS -------------------------------------
 
 
-def recursive_forecast(model, X_future, prediction_data):
-
+def recursive_forecast(
+    model,
+    X_future,
+    prediction_data,
+    previous_index_duplicates=1
+):
     # Make a copy of future features
     X_future_recursive = X_future.copy()
 
@@ -425,34 +429,46 @@ def recursive_forecast(model, X_future, prediction_data):
 
     X_future_recursive = X_future_recursive.loc[future_order]
 
-    # Store predictions
-    recursive_predictions = []
+    # Identify previous-index columns
+    previous_index_columns = [
+        "previous_month_index"
+    ] + [
+        f"previous_month_index_weighted{'' if i == 1 else i}"
+        for i in range(1, previous_index_duplicates + 1)
+    ]
 
+    # Keep only columns that exist
+    previous_index_columns = [
+        col for col in previous_index_columns
+        if col in X_future_recursive.columns
+    ]
+
+    recursive_predictions = []
     previous_prediction = None
 
     for i in range(len(X_future_recursive)):
 
-        # For subsequent months, use the preceding prediction
-        # For the first month, keep the actual previous month's index
+        row_index = X_future_recursive.index[i]
+
+        # Update previous-index features with the last prediction
         if previous_prediction is not None:
-            X_future_recursive.loc[
-                X_future_recursive.index[i],
-                "previous_month_index"
-            ] = previous_prediction
+            for col in previous_index_columns:
+                X_future_recursive.loc[row_index, col] = (
+                    previous_prediction
+                )
 
         # Predict current month
         prediction = model.predict(
-            X_future_recursive.iloc[[i]]
+            X_future_recursive.loc[[row_index]]
         )[0]
 
         prediction = np.clip(prediction, 0, 100)
 
         recursive_predictions.append(prediction)
 
-        # Save prediction for the next month
+        # Use this prediction for the next month
         previous_prediction = prediction
 
-    # Display results
     future_results = prediction_data.loc[
         X_future_recursive.index, ["target_month"]
     ].copy()
@@ -541,7 +557,7 @@ plt.savefig("predictions/graphs/overall_predictions.png")
 # RUSSIA XGBOOST DECISION TREE MODEL -------------------------------------
 
 # Load Russia risk index
-rus_ind_df = pd.read_csv("cleaned_datasets/russia_risk_index_monthly.csv")
+rus_ind_df = pd.read_csv("cleaned_datasets/russia/risk_index_monthly.csv")
 
 # Clean and prepare data
 results_rus = clean_data(df, rus_ind_df)
@@ -722,7 +738,7 @@ plt.savefig("predictions/graphs/russia_predictions.png")
 # CHINA XGBOOST DECISION TREE MODEL -------------------------------------
 
 # Load China risk index
-chn_ind_df = pd.read_csv("cleaned_datasets/china_risk_index_monthly.csv")
+chn_ind_df = pd.read_csv("cleaned_datasets/china/risk_index_monthly.csv")
 
 # Clean and prepare data
 results_chn = clean_data(df, chn_ind_df)
@@ -732,8 +748,8 @@ xgb_chn = XGBRegressor(
     n_estimators=1000,
     max_depth=2,
     learning_rate=0.1,
-    subsample=1,
-    colsample_bytree=1,
+    subsample=.7, 
+    colsample_bytree=.6,
     min_child_weight=4,
     reg_lambda=10,
     reg_alpha=1,
@@ -780,9 +796,9 @@ plot_accuracy(
     results_chn["data"]
 )
 
-# MAE: 4.415485003927479
-# RMSE: 5.068990691763594
-# R²: -0.6056485360654551
+# MAE CHINA: 4.8061157173488445
+# RMSE CHINA: 5.565631161967663
+# R^2 CHINA: -0.935692396649729
 
 # CHINA FUTURE PREDICTIONS -------------------------------------
 

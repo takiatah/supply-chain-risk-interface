@@ -1,0 +1,16 @@
+series,period,n_months,disruption_months,spearman_vs_future_shortfall,auc_disruption
+index_equal,all,220,24,0.084,0.394
+index_equal,before_2022,167,20,0.111,0.394
+index_equal,from_2022,53,4,-0.018,0.546
+index_pca,all,220,24,0.119,0.376
+index_pca,before_2022,167,20,0.176,0.367
+index_pca,from_2022,53,4,-0.069,0.526
+index_learned,all,173,16,0.359,0.407
+index_learned,before_2022,120,12,0.5,0.34
+index_learned,from_2022,53,4,0.07,0.582
+baseline_gpr_chn,all,220,24,0.204,0.312
+baseline_gpr_chn,before_2022,167,20,0.19,0.296
+baseline_gpr_chn,from_2022,53,4,0.453,0.327
+baseline_cny_vol_6m,all,234,24,-0.018,0.565
+baseline_cny_vol_6m,before_2022,181,20,-0.139,0.55
+baseline_cny_vol_6m,from_2022,53,4,0.252,0.617

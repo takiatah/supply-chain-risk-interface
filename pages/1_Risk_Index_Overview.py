@@ -1,4 +1,7 @@
 import streamlit as st
+import pandas as pd
+from pathlib import Path
+
 from utils.data_loader import load_data
 from utils.charts import create_risk_index_chart, create_comparison_chart, render_kpi_card
 from utils.styling import apply_custom_styles
@@ -148,3 +151,76 @@ st.plotly_chart(
     comparison_fig,
     width="stretch"
 )
+
+# ============================================================
+# KNOWN SHOCK ANALYSIS
+# ============================================================
+
+st.markdown(
+    '<div class="sub-header">Known Shock Analysis</div>',
+    unsafe_allow_html=True
+)
+
+st.caption(
+    "Evaluate how each risk index responded to major geopolitical "
+    "events by comparing the average risk level during the six months "
+    "before an event with the maximum risk level during the six months after."
+    "The alert threshold is 75: a risk index value of 75 or higher "
+    "is considered an alert."
+)
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+SHOCK_FILES = {
+    "Overall": PROJECT_ROOT / "cleaned_datasets" / "overall" / "check_shocks.csv",
+    "Russia": PROJECT_ROOT / "cleaned_datasets" / "russia" / "check_shocks.csv",
+    "China": PROJECT_ROOT / "cleaned_datasets" / "china" / "check_shocks.csv"
+}
+
+for index_type, file_path in SHOCK_FILES.items():
+
+    st.markdown(f"**{index_type} Risk Index**")
+
+    if not file_path.exists():
+        st.warning(f"Shock analysis file not found: {file_path.name}")
+        continue
+
+    shock_df = pd.read_csv(file_path)
+
+    # Keep only the equal-weighted risk index.
+    shock_df = shock_df[
+        shock_df["series"] == "index_equal"
+    ].copy()
+
+    if shock_df.empty:
+        st.info(f"No equal-weighted index shock results available for {index_type}.")
+        continue
+
+    # Remove the series column since every row represents index_equal.
+    shock_df = shock_df.drop(columns=["series"])
+
+    # Rename columns for readability.
+    shock_df = shock_df.rename(columns={
+        "event": "Geopolitical Event",
+        "avg_6m_before": "Average Risk (6M Before)",
+        "max_6m_after": "Maximum Risk (6M After)",
+        "rise": "Risk Increase",
+        "first_month_at_or_above_alert": "First Alert Month (75+)"
+    })
+
+    # Format numerical columns.
+    numeric_columns = [
+        "Average Risk (6M Before)",
+        "Maximum Risk (6M After)",
+        "Risk Increase"
+    ]
+
+    shock_df[numeric_columns] = shock_df[numeric_columns].round(1)
+
+    st.dataframe(
+        shock_df,
+        hide_index=True,
+        width="stretch"
+    )
+
+    st.markdown("")
