@@ -15,7 +15,7 @@ from utils.helpers import create_download_button, format_value, get_latest_actua
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 COMPONENT_FILES = {
-    "Overall": PROJECT_ROOT / "cleaned_datasets" / "risk_index_monthly.csv",
+    "Overall": PROJECT_ROOT / "cleaned_datasets" / "overall" / "risk_index_monthly.csv",
     "Russia": PROJECT_ROOT / "cleaned_datasets" / "russia" / "risk_index_monthly.csv",
     "China": PROJECT_ROOT / "cleaned_datasets" / "china" / "risk_index_monthly.csv"
 }
@@ -58,7 +58,9 @@ def load_component_data(file_path):
         .sort_values("Month")
     )
 
-    for column in COMPONENT_COLUMNS:
+    numeric_columns = list(COMPONENT_COLUMNS.keys()) + ["trend_12m"]
+
+    for column in numeric_columns:
         if column in component_df.columns:
             component_df[column] = pd.to_numeric(
                 component_df[column],
@@ -139,6 +141,12 @@ show_components = st.checkbox(
     "Show risk index components",
     value=False,
     key="individual_components"
+)
+
+show_trend = st.checkbox(
+    "Show 12-month long-term trend",
+    value=False,
+    key="individual_trend"
 )
 
 latest_value, latest_month = get_latest_actual(
@@ -271,6 +279,36 @@ if fig:
                 f"Component data file not found: {component_path}"
             )
 
+    # Add 12-month long-term trend if selected.
+    if show_trend:
+
+        component_path = COMPONENT_FILES[index_type]
+
+        if component_path.exists():
+
+            component_df = load_component_data(
+                str(component_path)
+            )
+
+            if "trend_12m" in component_df.columns:
+
+                fig.add_scatter(
+                    x=component_df["Month"],
+                    y=component_df["trend_12m"],
+                    mode="lines",
+                    name="12-Month Long-Term Trend",
+                    line=dict(
+                        color="#16a34a",
+                        width=2.5,
+                        dash="dash"
+                    )
+                )
+
+            else:
+                st.warning(
+                    "The 12-month trend column is unavailable."
+                )
+
     # Restore the original timeframe.
     if original_x_range is not None:
         fig.update_xaxes(
@@ -283,11 +321,11 @@ if fig:
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=1.02,
+            y=1.12,
             xanchor="left",
             x=0
         ),
-        margin=dict(t=100)
+        margin=dict(t=170)
     )
 
     st.plotly_chart(
