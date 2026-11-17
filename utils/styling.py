@@ -8,6 +8,9 @@ def apply_custom_styles():
     st.markdown(
         """
         <style>
+
+            /* Light mode defaults */
+            /* Main heading */
             .main-header {
                 font-size: 2.4rem;
                 font-weight: 750;
@@ -15,6 +18,7 @@ def apply_custom_styles():
                 margin-bottom: 0.2rem;
             }
 
+            /* Section headings */
             .sub-header {
                 font-size: 1.35rem;
                 font-weight: 650;
@@ -23,37 +27,26 @@ def apply_custom_styles():
                 margin-bottom: 0.5rem;
             }
 
+            /* Description */
             .description {
                 color: #64748b;
                 font-size: 1rem;
                 margin-bottom: 1.5rem;
             }
 
-            /* Adapt to Streamlit's theme */
-            @media (prefers-color-scheme: dark) {
-                .main-header {
-                    color: #bfdbfe !important;
-                }
-
-                .sub-header {
-                    color: #cbd5e1 !important;
-                }
-
-                .description {
-                    color: #94a3b8 !important;
-                }
-            }
-
             /* Dark mode */
-            .stApp[data-theme="dark"] .main-header {
+            html[data-theme="dark"] .main-header,
+            [data-theme="dark"] .main-header {
                 color: #bfdbfe !important;
             }
 
-            .stApp[data-theme="dark"] .sub-header {
+            html[data-theme="dark"] .sub-header,
+            [data-theme="dark"] .sub-header {
                 color: #cbd5e1 !important;
             }
 
-            .stApp[data-theme="dark"] .description {
+            html[data-theme="dark"] .description,
+            [data-theme="dark"] .description {
                 color: #94a3b8 !important;
             }
 
@@ -103,3 +96,4 @@ def apply_custom_styles():
         """,
         unsafe_allow_html=True
     )
+
