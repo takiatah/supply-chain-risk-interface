@@ -53,7 +53,49 @@ Historical model predictions and future forecasts are displayed separately to di
 
 ```text
 supply-chain-risk-interface/
+├── .streamlit
+│   └── config.toml
 ├── cleaned_datasets
+│   ├── china
+│   │   ├── check_future_trade.csv
+│   │   ├── check_shocks.csv
+│   │   ├── indicator_scores.csv
+│   │   ├── risk_change_episodes.csv
+│   │   ├── risk_change_monthly.csv
+│   │   ├── risk_index_monthly.csv
+│   │   ├── risk_index_raw.png
+│   │   ├── risk_index.png
+│   │   ├── weight_sensitivity.csv
+│   │   ├── weighting_explained.csv
+│   │   ├── weighting_explained.md
+│   │   ├── weights_equal_pca.csv
+│   │   └── weights_learned_by_year.csv
+│   ├── overall
+│   │   ├── check_future_trade.csv
+│   │   ├── check_shocks.csv
+│   │   ├── indicator_scores.csv
+│   │   ├── risk_change_episodes.csv
+│   │   ├── risk_change_monthly.csv
+│   │   ├── risk_index_monthly.csv
+│   │   ├── weight_sensitivity.csv
+│   │   ├── weighting_explained.csv
+│   │   ├── weighting_explained.md
+│   │   ├── weights_equal_pca.csv
+│   │   └── weights_learned_by_year.csv
+│   ├── russia
+│   │   ├── check_future_trade.csv
+│   │   ├── check_shocks.csv
+│   │   ├── indicator_scores.csv
+│   │   ├── risk_change_episodes.csv
+│   │   ├── risk_change_monthly.csv
+│   │   ├── risk_index_monthly.csv
+│   │   ├── risk_index_raw.png
+│   │   ├── risk_index.png
+│   │   ├── weight_sensitivity.csv
+│   │   ├── weighting_explained.csv
+│   │   ├── weighting_explained.md
+│   │   ├── weights_equal_pca.csv
+│   │   └── weights_learned_by_year.csv
 │   ├── china_risk_index_monthly.csv
 │   ├── main_data.csv
 │   ├── overall_data.csv
@@ -81,12 +123,12 @@ supply-chain-risk-interface/
 │   ├── data_loader.py
 │   ├── helpers.py
 │   └── styling.py
+├── .gitignore
 ├── app.py
-├── overall_data_with_predictions.csv
 ├── overall_data_description.md
+├── overall_data_with_predictions.csv
 ├── README.md
-├── requirements.txt
-└── .gitignore
+└── requirements.txt
 ```
 
 ## Installation and Setup
