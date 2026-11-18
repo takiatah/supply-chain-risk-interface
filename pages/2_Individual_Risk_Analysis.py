@@ -26,6 +26,12 @@ SHOCK_FILES = {
     "China": PROJECT_ROOT / "cleaned_datasets" / "china" / "check_shocks.csv"
 }
 
+SPIKE_FILES = {
+    "Overall": PROJECT_ROOT / "cleaned_datasets" / "overall" / "risk_change_monthly.csv",
+    "Russia": PROJECT_ROOT / "cleaned_datasets" / "russia" / "risk_change_monthly.csv",
+    "China": PROJECT_ROOT / "cleaned_datasets" / "china" / "risk_change_monthly.csv"
+}
+
 COMPONENT_COLUMNS = {
     "comp_dependency": "Dependency",
     "comp_transportation": "Transportation",
@@ -101,6 +107,132 @@ def load_shock_data(file_path):
         ).round(1)
 
     return shock_df
+
+
+@st.cache_data
+def load_spike_data(file_path):
+    spike_df = pd.read_csv(file_path)
+
+    spike_df["Month"] = pd.to_datetime(
+        spike_df["Month"],
+        errors="coerce"
+    )
+
+    numeric_columns = [
+        "index",
+        "gap_vs_trend",
+        "change_3m"
+    ]
+
+    for column in numeric_columns:
+        if column in spike_df.columns:
+            spike_df[column] = pd.to_numeric(
+                spike_df[column],
+                errors="coerce"
+            )
+
+    spike_df = (
+        spike_df
+        .dropna(subset=["Month"])
+        .sort_values("Month")
+        .reset_index(drop=True)
+    )
+
+    return spike_df
+
+
+def create_spike_summary(spike_df):
+
+    data = spike_df.copy()
+
+    # Identify months classified as short-term spikes.
+    data["is_spike"] = (
+        data["short_term"]
+        .astype(str)
+        .str.lower()
+        .eq("spike")
+    )
+
+    # Identify consecutive monthly spike episodes.
+    month_number = (
+        data["Month"].dt.year * 12
+        + data["Month"].dt.month
+    )
+
+    consecutive_spike = (
+        data["is_spike"].shift(fill_value=False)
+        & month_number.diff().eq(1)
+    )
+
+    episode_start = (
+        data["is_spike"] & ~consecutive_spike
+    )
+
+    data["spike_group"] = episode_start.cumsum()
+
+    spikes = data[data["is_spike"]].copy()
+
+    if spikes.empty:
+        return pd.DataFrame()
+
+    summaries = []
+
+    for _, episode in spikes.groupby("spike_group"):
+
+        # Find the month with the highest risk index.
+        peak_row = episode.loc[episode["index"].idxmax()]
+
+        # Extract the main driver from the peak month's description.
+        description = str(peak_row.get("description", ""))
+
+        driver_match = pd.Series([description]).str.extract(
+            r"Main driver over 3 months:\s*([^(]+)"
+        ).iloc[0, 0]
+
+        main_driver = (
+            driver_match.strip().title()
+            if pd.notna(driver_match)
+            else "Not identified"
+        )
+
+        summaries.append({
+            "Spike Period": (
+                episode["Month"].min().strftime("%b %Y")
+                if episode["Month"].min() == episode["Month"].max()
+                else (
+                    f"{episode['Month'].min():%b %Y} – "
+                    f"{episode['Month'].max():%b %Y}"
+                )
+            ),
+            "Peak Month": peak_row["Month"].strftime("%b %Y"),
+            "Peak Risk Index": peak_row["index"],
+            "Gap vs. Trend": peak_row["gap_vs_trend"],
+            "3-Month Change": peak_row["change_3m"],
+            "Duration (Months)": len(episode),
+            "Main Driver": main_driver
+        })
+
+    summary_df = pd.DataFrame(summaries)
+
+    summary_df = summary_df.sort_values(
+        "Peak Month",
+        key=lambda col: pd.to_datetime(col, format="%b %Y"),
+        ascending=True
+    ).reset_index(drop=True)
+
+    # Format numeric columns.
+    numeric_columns = [
+        "Peak Risk Index",
+        "Gap vs. Trend",
+        "3-Month Change"
+    ]
+
+    summary_df[numeric_columns] = (
+        summary_df[numeric_columns].round(2)
+    )
+
+    return summary_df
+
 
 apply_custom_styles()
 
@@ -309,6 +441,17 @@ if fig:
                     "The 12-month trend column is unavailable."
                 )
 
+    # Add alert threshold at 75.
+    fig.add_hline(
+        y=75,
+        line_dash="dash",
+        line_color="#ef4444",
+        line_width=2,
+        annotation_text="Alert Threshold (75)",
+        annotation_position="top left",
+        annotation_font_color="#ef4444"
+    )
+
     # Restore the original timeframe.
     if original_x_range is not None:
         fig.update_xaxes(
@@ -373,6 +516,60 @@ if not future.empty:
 
 else:
     st.info("No forecast observations are available.")
+
+
+
+# ============================================================
+# HISTORICAL RISK SPIKES
+# ============================================================
+
+st.markdown(
+    '<div class="section-divider"></div>',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    '<div class="sub-header">Historical Risk Spikes</div>',
+    unsafe_allow_html=True
+)
+
+st.caption(
+    "Summary of periods when the short-term risk index was "
+    "classified as a spike relative to its 12-month trend. "
+    "Episodes are grouped by consecutive spike months."
+)
+
+spike_path = SPIKE_FILES[index_type]
+
+if spike_path.exists():
+
+    spike_df = load_spike_data(str(spike_path))
+
+    spike_summary = create_spike_summary(spike_df)
+
+    if not spike_summary.empty:
+
+        st.dataframe(
+            spike_summary,
+            width="stretch",
+            hide_index=True
+        )
+
+        create_download_button(
+            spike_summary,
+            f"{index_type.lower()}_spike_summary.csv"
+        )
+
+    else:
+        st.info(
+            f"No short-term risk spikes identified for {index_type}."
+        )
+
+else:
+    st.warning(
+        f"Risk change data file not found: {spike_path}"
+    )
+
 
 # ============================================================
 # KNOWN SHOCK ANALYSIS

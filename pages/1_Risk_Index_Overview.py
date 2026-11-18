@@ -117,6 +117,15 @@ fig = create_risk_index_chart(
 )
 
 if fig:
+    fig.add_hline(
+        y=75,
+        line_dash="dash",
+        line_color="#ef4444",
+        line_width=2,
+        annotation_text="Alert Threshold (75)",
+        annotation_position="top left",
+        annotation_font_color="#ef4444"
+    )
     st.plotly_chart(fig, width="stretch")
 else:
     st.warning("Overall risk index data is unavailable.")
@@ -145,6 +154,16 @@ comparison_predictions = st.checkbox(
 comparison_fig = create_comparison_chart(
     df,
     show_predictions=comparison_predictions
+)
+
+comparison_fig.add_hline(
+    y=75,
+    line_dash="dash",
+    line_color="#ef4444",
+    line_width=2,
+    annotation_text="Alert Threshold (75)",
+    annotation_position="top left",
+    annotation_font_color="#ef4444"
 )
 
 st.plotly_chart(
