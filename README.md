@@ -2,6 +2,8 @@
 
 An interactive Streamlit dashboard for exploring China–Russia trade relationships, monitoring supply chain vulnerabilities, and analyzing historical and forecasted risk indices.
 
+**Interface:** https://china-russia-supply-chain-risk.streamlit.app/
+
 ## Overview
 
 This project examines supply chain risks associated with China–Russia trade relationships through historical trade data, economic indicators, geopolitical developments, transportation metrics, and sanctions data.
