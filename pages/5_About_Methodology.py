@@ -1,7 +1,12 @@
+from pathlib import Path
+
 import streamlit as st
 
 from utils.styling import apply_custom_styles
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+DATA_DESCRIPTION_PATH = PROJECT_ROOT / "overall_data_description.md"
 
 apply_custom_styles()
 
@@ -77,8 +82,8 @@ def render_about_page():
 
     st.markdown(
         """
-        The dashboard displays forecasts for June through November
-        2026.
+        The dashboard displays forecasts for July through November
+        2026 using XGBoost decision tree models.
 
         Historical actual values, historical model predictions,
         and future forecasts are displayed separately.
@@ -107,5 +112,29 @@ def render_about_page():
         be interpreted alongside the underlying indicators.
         """
     )
+
+    st.markdown(
+        '<div class="section-divider"></div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        '<div class="sub-header">Downloadable Data Documentation</div>',
+        unsafe_allow_html=True
+    )
+
+    if DATA_DESCRIPTION_PATH.exists():
+
+        with open(DATA_DESCRIPTION_PATH, "rb") as file:
+            st.download_button(
+                label="Download Complete Data Documentation",
+                data=file,
+                file_name="overall_data_description.md",
+                mime="text/markdown",
+                width="stretch"
+            )
+
+    else:
+        st.warning("Data documentation file not found.")
 
 render_about_page()
